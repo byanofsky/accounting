@@ -1,4 +1,3 @@
-import styles from "./page.module.css";
 import prisma from "@/lib/db";
 import CreateTransaction from "@/components/CreateTransaction";
 
@@ -10,7 +9,8 @@ async function getData() {
 export default async function Home() {
   const data = await getData();
   return (
-    <main className={styles.main}>
+    <main>
+      <h1>Accounting</h1>
       <h2>Transactions</h2>
       <table>
         <thead>
