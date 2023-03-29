@@ -1,8 +1,11 @@
 "use client";
 
 import { FormEventHandler, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CreateTransaction() {
+  const router = useRouter();
+
   const [other, setOther] = useState("");
   const [amount, setAmount] = useState("");
 
@@ -26,6 +29,7 @@ export default function CreateTransaction() {
     // TODO: Handle success
     setAmount("");
     setOther("");
+    router.refresh();
   };
 
   return (
