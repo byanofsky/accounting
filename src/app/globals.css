@@ -4,9 +4,9 @@
 
 @layer base {
   h1 {
-    @apply text-2xl
+    @apply text-6xl font-extrabold text-slate-900 mb-6;
   }
   h2 {
-    @apply text-xl
+    @apply text-4xl font-bold text-slate-900 mb-4;
   }
 }

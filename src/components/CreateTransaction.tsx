@@ -1,6 +1,12 @@
 "use client";
 
-import { FormEventHandler, useState } from "react";
+import React, {
+  ButtonHTMLAttributes,
+  FormEventHandler,
+  HTMLInputTypeAttribute,
+  InputHTMLAttributes,
+  useState,
+} from "react";
 import { useRouter } from "next/navigation";
 
 export default function CreateTransaction() {
@@ -34,24 +40,77 @@ export default function CreateTransaction() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>
-        To/From:
-        <input
-          type="text"
-          value={other}
-          onChange={(event) => setOther(event.target.value)}
-        />
-      </label>
-      <label>
-        Amount:
-        <input
-          type="number"
-          step="0.01"
-          value={amount}
-          onChange={(event) => setAmount(event.target.value)}
-        />
-      </label>
-      <button type="submit">Submit</button>
+      <TextField
+        value={other}
+        label="To/From"
+        onChange={(event) => setOther(event.target.value)}
+        placeholder="Name"
+        id="other-field"
+        type="text"
+      />
+      <TextField
+        value={amount}
+        label="Amount"
+        onChange={(event) => setAmount(event.target.value)}
+        placeholder="Amount"
+        id="amount"
+        type="number"
+        step={0.01}
+      />
+
+      <Button type="submit">Submit</Button>
     </form>
   );
 }
+
+interface TextFieldProps {
+  value: string;
+  label: string;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  placeholder: string;
+  id: string;
+  type: HTMLInputTypeAttribute;
+  step?: InputHTMLAttributes<HTMLInputElement>["step"];
+}
+
+function TextField({
+  id,
+  value,
+  onChange,
+  placeholder,
+  label,
+  type = "text",
+  step,
+}: TextFieldProps) {
+  return (
+    <div className="mb-4">
+      <label htmlFor={id} className="block font-bold mb-2">
+        {label}
+      </label>
+      <input
+        id={id}
+        className="shadow appearance-none border rounded w-full py-2 px-3 focus:shadow-outlin focus:outline-none"
+        placeholder={placeholder}
+        type={type}
+        value={value}
+        onChange={onChange}
+        step={step}
+      />
+    </div>
+  );
+}
+
+interface ButtonProps extends React.PropsWithChildren {
+  type: ButtonHTMLAttributes<HTMLButtonElement>["type"];
+}
+
+const Button = ({ type, children }: ButtonProps) => {
+  return (
+    <button
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      type={type}
+    >
+      {children}
+    </button>
+  );
+};
