@@ -1,7 +1,15 @@
 import db from "@/lib/db";
 
 async function getData() {
-  const transactions = await db.transaction.findMany();
+  const transactions = await db.transaction.findMany({
+    include: {
+      category: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
   return transactions;
 }
 
@@ -25,6 +33,9 @@ export default async function TransactionTable() {
             <div role="columnheader" className="table-cell p-4">
               Amount
             </div>
+            <div role="columnheader" className="table-cell p-4">
+              Category
+            </div>
           </div>
         </div>
         <div className="table-row-group bg-white text-slate-500">
@@ -34,6 +45,7 @@ export default async function TransactionTable() {
               id={transaction.id}
               other={transaction.other}
               amount={transaction.amount}
+              category={transaction.category?.name}
             />
           ))}
         </div>
@@ -47,9 +59,10 @@ interface TransactionProps {
   id: string;
   other: string;
   amount: number;
+  category?: string;
 }
 
-function TransactionRow({ id, other, amount }: TransactionProps) {
+function TransactionRow({ id, other, amount, category }: TransactionProps) {
   const formattedAmount = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -61,6 +74,7 @@ function TransactionRow({ id, other, amount }: TransactionProps) {
       <div className="table-cell p-4">{id}</div>
       <div className="table-cell p-4">{other}</div>
       <div className="table-cell p-4">{formattedAmount}</div>
+      <div className="table-cell p-4">{category}</div>
     </div>
   );
 }

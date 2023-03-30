@@ -1,19 +1,23 @@
 "use client";
 
-import React, {
-  ButtonHTMLAttributes,
-  FormEventHandler,
-  HTMLInputTypeAttribute,
-  InputHTMLAttributes,
-  useState,
-} from "react";
+import React, { FormEventHandler, useState } from "react";
 import { useRouter } from "next/navigation";
+import Field from "./Field";
+import Button from "./Button";
+import Input from "./Input";
+import Dropdown from "./Dropdown";
+import { Category } from "@prisma/client";
 
-export default function CreateTransaction() {
+interface Props {
+  categories: Category[];
+}
+
+export default function CreateTransaction({ categories }: Props) {
   const router = useRouter();
 
   const [other, setOther] = useState("");
   const [amount, setAmount] = useState("");
+  const [categoryId, setCategoryId] = useState<string | undefined>(undefined);
 
   const handleSubmit: FormEventHandler = async (event) => {
     event.preventDefault();
@@ -24,6 +28,7 @@ export default function CreateTransaction() {
         other,
         // TODO: Add validation
         amount,
+        categoryId,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -38,79 +43,42 @@ export default function CreateTransaction() {
     router.refresh();
   };
 
+  const categoryOptions = categories.map((category) => ({
+    value: category.id,
+    label: category.name,
+  }));
+
   return (
     <form onSubmit={handleSubmit}>
-      <TextField
-        value={other}
-        label="To/From"
-        onChange={(event) => setOther(event.target.value)}
-        placeholder="Name"
-        id="other-field"
-        type="text"
-      />
-      <TextField
-        value={amount}
-        label="Amount"
-        onChange={(event) => setAmount(event.target.value)}
-        placeholder="Amount"
-        id="amount"
-        type="number"
-        step={0.01}
-      />
+      <Field htmlFor="other-field" label="To/From">
+        <Input
+          id="other-field"
+          type="text"
+          placeholder="Name"
+          value={other}
+          onChange={(event) => setOther(event.target.value)}
+        />
+      </Field>
+      <Field htmlFor="amount" label="Amount">
+        <Input
+          id="amount"
+          type="number"
+          placeholder="Amount"
+          value={amount}
+          onChange={(event) => setAmount(event.target.value)}
+          step={0.01}
+        />
+      </Field>
+      <Field htmlFor="category" label="Category">
+        <Dropdown
+          id="category"
+          options={categoryOptions}
+          value={categoryId}
+          onChange={(event) => setCategoryId(event.target.value)}
+        />
+      </Field>
 
       <Button type="submit">Submit</Button>
     </form>
   );
 }
-
-interface TextFieldProps {
-  value: string;
-  label: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
-  placeholder: string;
-  id: string;
-  type: HTMLInputTypeAttribute;
-  step?: InputHTMLAttributes<HTMLInputElement>["step"];
-}
-
-function TextField({
-  id,
-  value,
-  onChange,
-  placeholder,
-  label,
-  type = "text",
-  step,
-}: TextFieldProps) {
-  return (
-    <div className="mb-4">
-      <label htmlFor={id} className="block font-bold mb-2">
-        {label}
-      </label>
-      <input
-        id={id}
-        className="shadow appearance-none border rounded w-full py-2 px-3 focus:shadow-outlin focus:outline-none"
-        placeholder={placeholder}
-        type={type}
-        value={value}
-        onChange={onChange}
-        step={step}
-      />
-    </div>
-  );
-}
-
-interface ButtonProps extends React.PropsWithChildren {
-  type: ButtonHTMLAttributes<HTMLButtonElement>["type"];
-}
-
-const Button = ({ type, children }: ButtonProps) => {
-  return (
-    <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-      type={type}
-    >
-      {children}
-    </button>
-  );
-};

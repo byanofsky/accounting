@@ -11,7 +11,15 @@ datasource db {
 }
 
 model Transaction {
-  id     String @id @default(cuid())
-  other  String
-  amount Int
+  id         String    @id @default(cuid())
+  other      String
+  amount     Int
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+}
+
+model Category {
+  id          String        @id @default(cuid())
+  name        String        @unique
+  Transaction Transaction[]
 }
