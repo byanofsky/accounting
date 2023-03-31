@@ -40,6 +40,7 @@ export default function CreateTransaction({ categories }: Props) {
     // TODO: Handle success
     setAmount("");
     setOther("");
+    setCategoryId(undefined);
     router.refresh();
   };
 
@@ -74,7 +75,7 @@ export default function CreateTransaction({ categories }: Props) {
           id="category"
           options={categoryOptions}
           value={categoryId}
-          onChange={(event) => setCategoryId(event.target.value)}
+          onChange={(value) => setCategoryId(value)}
         />
       </Field>
 

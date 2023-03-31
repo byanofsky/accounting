@@ -20,7 +20,7 @@ export default function Input({
   return (
     <input
       id={id}
-      className="shadow appearance-none border rounded w-full py-2 px-3 focus:shadow-outlin focus:outline-none"
+      className="shadow appearance-none border rounded w-full py-2 px-3 focus:shadow-outline focus:outline-none"
       placeholder={placeholder}
       type={type}
       value={value}
