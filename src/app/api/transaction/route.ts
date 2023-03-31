@@ -9,6 +9,7 @@ export async function POST(request: Request) {
       other: res.other,
       // TODO: Add validation
       amount: Number(res.amount) * 100,
+      date: new Date(res.date),
       categoryId: res.categoryId,
     },
   });

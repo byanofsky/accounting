@@ -25,13 +25,13 @@ export default async function TransactionTable() {
             className="table-row border-b font-medium text-slate-400 text-left"
           >
             <div role="columnheader" className="table-cell p-4">
-              Id
-            </div>
-            <div role="columnheader" className="table-cell p-4">
-              To/From
+              Name
             </div>
             <div role="columnheader" className="table-cell p-4">
               Amount
+            </div>
+            <div role="columnheader" className="table-cell p-4">
+              Date
             </div>
             <div role="columnheader" className="table-cell p-4">
               Category
@@ -42,9 +42,9 @@ export default async function TransactionTable() {
           {data.map((transaction) => (
             <TransactionRow
               key={transaction.id}
-              id={transaction.id}
               other={transaction.other}
               amount={transaction.amount}
+              date={transaction.date}
               category={transaction.category?.name}
             />
           ))}
@@ -56,24 +56,26 @@ export default async function TransactionTable() {
 }
 
 interface TransactionProps {
-  id: string;
   other: string;
   amount: number;
+  date: Date;
   category?: string;
 }
 
-function TransactionRow({ id, other, amount, category }: TransactionProps) {
+function TransactionRow({ other, amount, date, category }: TransactionProps) {
   const formattedAmount = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     minimumFractionDigits: 2,
   }).format(amount / 100);
 
+  const formattedDate = new Intl.DateTimeFormat("en-US").format(date);
+
   return (
     <div className="table-row border-b border-s">
-      <div className="table-cell p-4">{id}</div>
       <div className="table-cell p-4">{other}</div>
       <div className="table-cell p-4">{formattedAmount}</div>
+      <div className="table-cell p-4">{formattedDate}</div>
       <div className="table-cell p-4">{category}</div>
     </div>
   );

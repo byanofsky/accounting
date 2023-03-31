@@ -17,6 +17,7 @@ export default function CreateTransaction({ categories }: Props) {
 
   const [other, setOther] = useState("");
   const [amount, setAmount] = useState("");
+  const [date, setDate] = useState("");
   const [categoryId, setCategoryId] = useState<string | undefined>(undefined);
 
   const handleSubmit: FormEventHandler = async (event) => {
@@ -28,6 +29,7 @@ export default function CreateTransaction({ categories }: Props) {
         other,
         // TODO: Add validation
         amount,
+        date,
         categoryId,
       }),
       headers: {
@@ -40,6 +42,7 @@ export default function CreateTransaction({ categories }: Props) {
     // TODO: Handle success
     setAmount("");
     setOther("");
+    setDate("");
     setCategoryId(undefined);
     router.refresh();
   };
@@ -51,7 +54,7 @@ export default function CreateTransaction({ categories }: Props) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Field htmlFor="other-field" label="To/From">
+      <Field htmlFor="other-field" label="Name">
         <Input
           id="other-field"
           type="text"
@@ -68,6 +71,15 @@ export default function CreateTransaction({ categories }: Props) {
           value={amount}
           onChange={(event) => setAmount(event.target.value)}
           step={0.01}
+        />
+      </Field>
+      <Field htmlFor="date" label="Date">
+        <Input
+          id="date"
+          type="date"
+          placeholder="Date"
+          value={date}
+          onChange={(event) => setDate(event.target.value)}
         />
       </Field>
       <Field htmlFor="category" label="Category">
