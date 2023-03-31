@@ -21,7 +21,7 @@ export default function Dropdown({ id, options, value, onChange }: Props) {
 
   const optionsWithNone = useMemo(
     () => [{ label: "None", value: undefined }, ...options],
-    options
+    [options]
   );
 
   return (
