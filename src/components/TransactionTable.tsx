@@ -1,7 +1,12 @@
+import { getUserFromCookies } from "@/lib/auth";
 import db from "@/lib/db";
+import { cookies } from "next/headers";
 
-async function getData() {
+async function getData(userId: string) {
   const transactions = await db.transaction.findMany({
+    where: {
+      userId,
+    },
     include: {
       category: {
         select: {
@@ -14,7 +19,14 @@ async function getData() {
 }
 
 export default async function TransactionTable() {
-  const data = await getData();
+  // TODO: Move to middleware
+  const user = await getUserFromCookies(cookies());
+  // TODO: Redirect when not authorized.
+  if (!user) {
+    return <p>Not authorized</p>;
+  }
+
+  const data = await getData(user.id);
 
   return (
     <div className="relative bg-slate-50 rounded-xl overflow-auto">

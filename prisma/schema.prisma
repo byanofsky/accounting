@@ -17,10 +17,23 @@ model Transaction {
   date       DateTime
   category   Category? @relation(fields: [categoryId], references: [id])
   categoryId String?
+  user       User      @relation(fields: [userId], references: [id])
+  userId     String
 }
 
 model Category {
   id          String        @id @default(cuid())
   name        String        @unique
   Transaction Transaction[]
+  user        User          @relation(fields: [userId], references: [id])
+  userId      String
+}
+
+model User {
+  id             String        @id @default(cuid())
+  email          String        @unique
+  name           String        @default("")
+  hashedPassword String
+  categories     Category[]
+  transactions   Transaction[]
 }
