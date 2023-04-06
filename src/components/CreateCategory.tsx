@@ -24,7 +24,7 @@ export default function CreateCategory() {
       },
     });
     if (!res.ok) {
-      throw new Error(`Transaction Create Error`);
+      throw new Error(`Category Create Error`);
     }
     // TODO: Handle success
     setName("");
