@@ -4,6 +4,7 @@ import { getUserFromCookies } from "@/lib/auth";
 import { cookies } from "next/headers";
 
 export async function POST(request: Request) {
+  // TODO: Extract auth to common
   const user = await getUserFromCookies(cookies());
 
   if (!user) {

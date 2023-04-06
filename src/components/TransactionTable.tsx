@@ -1,6 +1,7 @@
 import { getUserFromCookies } from "@/lib/auth";
 import db from "@/lib/db";
 import { cookies } from "next/headers";
+import Link from "next/link";
 
 async function getData(userId: string) {
   const transactions = await db.transaction.findMany({
@@ -48,12 +49,14 @@ export default async function TransactionTable() {
             <div role="columnheader" className="table-cell p-4">
               Category
             </div>
+            <div role="columnheader" className="table-cell p-4"></div>
           </div>
         </div>
         <div className="table-row-group bg-white text-slate-500">
           {data.map((transaction) => (
             <TransactionRow
               key={transaction.id}
+              id={transaction.id}
               other={transaction.other}
               amount={transaction.amount}
               date={transaction.date}
@@ -68,13 +71,20 @@ export default async function TransactionTable() {
 }
 
 interface TransactionProps {
+  id: string;
   other: string;
   amount: number;
   date: Date;
   category?: string;
 }
 
-function TransactionRow({ other, amount, date, category }: TransactionProps) {
+function TransactionRow({
+  id,
+  other,
+  amount,
+  date,
+  category,
+}: TransactionProps) {
   const formattedAmount = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -89,6 +99,9 @@ function TransactionRow({ other, amount, date, category }: TransactionProps) {
       <div className="table-cell p-4">{formattedAmount}</div>
       <div className="table-cell p-4">{formattedDate}</div>
       <div className="table-cell p-4">{category}</div>
+      <div className="table-cell p-4">
+        <Link href={`/transaction/${id}`}>Edit</Link>
+      </div>
     </div>
   );
 }
