@@ -10,6 +10,7 @@ type AuthJWTPayload = JWTPayload & {
 const isAuthJWTPaylot = (payload: JWTPayload): payload is AuthJWTPayload => {
   if (typeof payload !== "object") return false;
   const user = payload.user;
+  if (typeof user !== "object") return false;
   if (!user) return false;
   return "name" in user && "email" in user && "id" in user;
 };
