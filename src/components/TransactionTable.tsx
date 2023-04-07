@@ -1,5 +1,6 @@
 import { getUserFromCookies } from "@/lib/auth";
 import db from "@/lib/db";
+import { formatCurrency, formatDate } from "@/lib/format";
 import { cookies } from "next/headers";
 import Link from "next/link";
 
@@ -85,13 +86,9 @@ function TransactionRow({
   date,
   category,
 }: TransactionProps) {
-  const formattedAmount = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-  }).format(amount / 100);
+  const formattedAmount = formatCurrency(amount);
 
-  const formattedDate = new Intl.DateTimeFormat("en-US").format(date);
+  const formattedDate = formatDate(date);
 
   return (
     <div className="table-row border-b border-s">
